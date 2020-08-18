@@ -133,3 +133,6 @@ bin/
 
 # pyvenv
 pyvenv.cfg
+
+# idea
+.idea/
