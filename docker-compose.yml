@@ -4,9 +4,9 @@
     db:
       image: postgres
       environment:
-        - POSTGRES_DB=postgres
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=quiz
+        - POSTGRES_USER=gsbaker
+        - POSTGRES_PASSWORD=d=sC^9yszej<ND!
     web:
       build: .
       command: python mysite/manage.py runserver 0.0.0.0:8000

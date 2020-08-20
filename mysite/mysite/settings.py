@@ -76,9 +76,9 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'NAME': 'quiz',
+        'USER': 'gsbaker',
+        'PASSWORD': 'd=sC^9yszej<ND!',
         'HOST': 'db',
         'PORT': 5432,
     }
@@ -109,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'BST'
 
 USE_I18N = True
 
