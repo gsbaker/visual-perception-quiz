@@ -6,10 +6,8 @@ from . import views
 app_name = 'quiz'
 urlpatterns = [
     # ex: /quiz/
-    path('', views.index, name='index'),
-    # ex: /quiz/1/
-    path('<int:question_id>/', views.detail, name='detail'),
-    path('<int:question_id>/results/', views.results, name='results'),
-    # ex: /quiz/1/answer/
-    path('<int:question_id>/answer/', views.answer, name='answer')
+    path('', views.IndexView.as_view(), name='index'),
+    path('<int:pk>/', views.DetailView.as_view(), name='detail'),
+    path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
+    path('<int:question_id>/answer/', views.answer, name='answer'),
 ]
