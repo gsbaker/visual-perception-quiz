@@ -8,6 +8,8 @@ from .models import Question, Choice
 
 
 class IndexView(generic.ListView):
+    paginate_by = 1
+    model = Question
     template_name = 'quiz/index.html'
     context_object_name = 'question_list'
 
