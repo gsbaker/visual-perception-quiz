@@ -105,6 +105,14 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# I added this: https://docs.djangoproject.com/en/3.1/topics/cache/
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
