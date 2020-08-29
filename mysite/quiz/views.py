@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
@@ -11,25 +11,31 @@ from .forms import UserForm
 class IndexView(generic.FormView):
     form_class = UserForm
     model = User
-    template_name = 'quiz/user-new.html'
+    template_name = 'quiz/index.html'
     context_object_name = 'user'
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
-        form.create_user()
-        return HttpResponseRedirect(reverse('quiz:questions'))
+        user = form.create_user()
+        self.request.session['user_name'] = user.name
 
-    def get_queryset(self):
-        return User.objects.order_by(id)
+        return HttpResponseRedirect(reverse('quiz:questions'))
 
 
 class QuestionsView(generic.ListView):
     template_name = 'quiz/questions.html'
-    context_object_name = 'question_list'
+    context_object_name = 'questions_list'
+    model = Question
 
     def get_queryset(self):
         return Question.objects.order_by('-id')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        return {
+            "user_name": self.request.session['user_name'],
+            "question_list": Question.objects.order_by('-id')
+        }
 
 
 class LeaderBoardView(generic.ListView):
