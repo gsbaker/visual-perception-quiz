@@ -10,7 +10,8 @@ urlpatterns = [
     # ex: /quiz/questions/
     path('questions/', views.QuestionsView.as_view(), name='questions'),
     path('form/', views.get_name, name='form'),
-    path('<int:pk>/', views.DetailView.as_view(), name='detail'),
+    # path('<int:pk>/', views.DetailView.as_view(), name='detail'),
+    path('<int:pk>/', views.QuestionFormView.as_view(), name='qa-form'),
     path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
     path('<int:question_id>/answer/', views.answer, name='answer'),
 ]

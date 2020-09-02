@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
-from .models import Question, Choice, User
-from .forms import UserForm
+from .models import User, Question, Choice, Answer
+from .forms import UserForm, QuestionAnswerForm
 
 # Create your views here.
 
@@ -45,6 +45,23 @@ class LeaderBoardView(generic.ListView):
 class DetailView(generic.DetailView):
     model = Question
     template_name = 'quiz/detail.html'
+
+    def get_context_data(self, **kwargs):
+        return {
+            'form': QuestionAnswerForm
+        }
+
+
+class QuestionFormView(generic.CreateView):
+    form_class = QuestionAnswerForm
+    model = Answer
+    template_name = 'quiz/question-form.html'
+
+    def get_initial(self):
+        initial = super(QuestionFormView, self).get_initial()
+        initial['question'] = Question.objects.get(pk=self.kwargs['pk'])
+        return initial
+
 
 
 class ResultsView(generic.DetailView):
