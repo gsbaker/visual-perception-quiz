@@ -105,8 +105,10 @@ class ResultsView(generic.DetailView):
         user_id = self.request.session['user_id']
         user = User.objects.get(pk=user_id)
         return {
+            "user_id": user.id,
             "user_name": user.name,
-            "user_score": user.score
+            "user_score": user.score,
+            "users": User.objects.all().order_by('-score')
         }
 
 
