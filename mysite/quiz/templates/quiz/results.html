@@ -1,15 +1,3 @@
-<h1>{{ question.question_text }}</h1>
+{{ user_name }}
 
-<ul>
-{% for choice in question.choice_set.all %}
-    {% if choice.correct %}
-        <li>{{ choice.choice_text }} — This one is correct</li>
-
-    {% else %}
-        <li>{{ choice.choice_text }}</li>
-    {% endif %}
-
-{% endfor %}
-</ul>
-
-<a href="{% url 'quiz:detail' question.id %}">Vote again?</a>
+{{ user_score }}

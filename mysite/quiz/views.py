@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.views import generic
 from .models import User, Question, Choice, Answer
 from .forms import UserForm, QuestionAnswerForm
+import logging
 
 # Create your views here.
 
@@ -18,9 +19,9 @@ class IndexView(generic.FormView):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
         user = form.create_user()
-        self.request.session['user_name'] = user.name
+        self.request.session['user_id'] = user.id
 
-        return HttpResponseRedirect(reverse('quiz:questions'))
+        return HttpResponseRedirect(reverse('quiz:qa-form', args=(1, )))
 
 
 class QuestionsView(generic.ListView):
@@ -32,8 +33,10 @@ class QuestionsView(generic.ListView):
         return Question.objects.order_by('-id')
 
     def get_context_data(self, *, object_list=None, **kwargs):
+        user_id = self.request.session['user_id']
+        user_name = User.objects.get(pk=user_id)
         return {
-            "user_name": self.request.session['user_name'],
+            "user_name": user_name,
             "question_list": Question.objects.order_by('-id')
         }
 
@@ -67,10 +70,44 @@ class QuestionFormView(generic.CreateView):
         context['question'] = Question.objects.get(pk=self.kwargs['pk'])
         return context
 
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+
+        current_question_id = Question.objects.get(pk=self.kwargs['pk']).pk
+        question = get_object_or_404(Question, pk=current_question_id)
+        try:
+            selected_choice = question.choice_set.get(pk=form.cleaned_data['choices'].id)
+        except (KeyError, Choice.DoesNotExist):
+            return HttpResponseRedirect(reverse("quiz:qa-form", args=(current_question_id, )))
+        else:
+            if selected_choice.correct:
+                user_id = self.request.session['user_id']
+                user = User.objects.get(pk=user_id)
+                user.score += 1
+                user.save()
+
+        new_question_id = current_question_id + 1
+        try:
+            Question.objects.get(pk=new_question_id)
+        except (KeyError, Question.DoesNotExist):
+            user_id = self.request.session['user_id']
+            return HttpResponseRedirect(reverse("quiz:results", args=(user_id,)))
+
+        return HttpResponseRedirect(reverse("quiz:qa-form", args=(new_question_id, )))
+
 
 class ResultsView(generic.DetailView):
-    model = Question
+    model = User
     template_name = 'quiz/results.html'
+
+    def get_context_data(self, **kwargs):
+        user_id = self.request.session['user_id']
+        user = User.objects.get(pk=user_id)
+        return {
+            "user_name": user.name,
+            "user_score": user.score
+        }
 
 
 def get_name(request):
