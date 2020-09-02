@@ -62,6 +62,10 @@ class QuestionFormView(generic.CreateView):
         initial['question'] = Question.objects.get(pk=self.kwargs['pk'])
         return initial
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['question'] = Question.objects.get(pk=self.kwargs['pk'])
+        return context
 
 
 class ResultsView(generic.DetailView):
