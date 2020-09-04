@@ -1,7 +1,20 @@
-<h2>{{ question.question_text }}</h2>
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+<h2>{{ current_question.question_text }}</h2>
 
 <form method="post">
     {% csrf_token %}
     {{ form }}
-    <input type="submit" value="Submit">
+    {% if previous_question %}
+        <button type="submit">
+            <a href="../{{ previous_question.id }}">Previous</a>
+        </button>
+    {% endif %}
+    {% if next_question %}
+        <input type="submit" name="next" value="Next">
+    {% else %}
+        <input type="submit" name="next" value="Submit">
+    {% endif %}
 </form>
+{% endblock %}

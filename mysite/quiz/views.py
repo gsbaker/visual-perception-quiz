@@ -67,19 +67,51 @@ class QuestionFormView(generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['question'] = Question.objects.get(pk=self.kwargs['pk'])
+        current_question = Question.objects.get(pk=self.kwargs['pk'])
+        context['current_question'] = current_question
+
+        # try and get a previous question
+        try:
+            prev_id = current_question.id - 1
+            prev_question = Question.objects.get(pk=prev_id)
+        except (KeyError, Question.DoesNotExist):
+            pass
+        else:
+            context['previous_question'] = prev_question
+
+        # try and get a next question
+        try:
+            next_id = current_question.id + 1
+            next_question = Question.objects.get(pk=next_id)
+        except (KeyError, Question.DoesNotExist):
+            pass
+        else:
+            context['next_question'] = next_question
+
         return context
+
+    def form_invalid(self, form):
+        current_question = Question.objects.get(pk=self.kwargs['pk'])
+        if 'prev' in self.request.POST:
+            prev_question_id = current_question.id - 1
+            return HttpResponseRedirect(reverse("quiz:qa-form", args=(prev_question_id,)))
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
+        current_question = Question.objects.get(pk=self.kwargs['pk'])
 
-        current_question_id = Question.objects.get(pk=self.kwargs['pk']).pk
-        question = get_object_or_404(Question, pk=current_question_id)
+        # get the name of submit input
+        if 'next' in self.request.POST:
+            pass
+        elif 'prev' in self.request.POST:
+            prev_question_id = current_question.id - 1
+            return HttpResponseRedirect(reverse("quiz:qa-form", args=(prev_question_id,)))
+
         try:
-            selected_choice = question.choice_set.get(pk=form.cleaned_data['choices'].id)
+            selected_choice = current_question.choice_set.get(pk=form.cleaned_data['choices'].id)
         except (KeyError, Choice.DoesNotExist):
-            return HttpResponseRedirect(reverse("quiz:qa-form", args=(current_question_id, )))
+            return HttpResponseRedirect(reverse("quiz:qa-form", args=(current_question.pk, )))
         else:
             if selected_choice.correct:
                 user_id = self.request.session['user_id']
@@ -87,7 +119,7 @@ class QuestionFormView(generic.CreateView):
                 user.score += 1
                 user.save()
 
-        new_question_id = current_question_id + 1
+        new_question_id = current_question.id + 1
         try:
             Question.objects.get(pk=new_question_id)
         except (KeyError, Question.DoesNotExist):
