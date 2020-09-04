@@ -62,7 +62,20 @@ class QuestionFormView(generic.CreateView):
 
     def get_initial(self):
         initial = super(QuestionFormView, self).get_initial()
+
+        current_question = Question.objects.get(pk=self.kwargs['pk'])
         initial['question'] = Question.objects.get(pk=self.kwargs['pk'])
+
+        # check if the user has already made a choice for this question
+        try:
+            selected_id = str(current_question.id) + "-selected"
+            current_choice_id = self.request.session[selected_id]
+            current_choice = Choice.objects.get(pk=current_choice_id)
+        except KeyError:
+            pass
+        else:
+            initial['choices'] = current_choice
+
         return initial
 
     def get_context_data(self, **kwargs):
@@ -113,6 +126,9 @@ class QuestionFormView(generic.CreateView):
         except (KeyError, Choice.DoesNotExist):
             return HttpResponseRedirect(reverse("quiz:qa-form", args=(current_question.pk, )))
         else:
+            # save the selected choice using session data
+            selected_id = str(current_question.id) + "-selected"
+            self.request.session[selected_id] = selected_choice.id
             if selected_choice.correct:
                 user_id = self.request.session['user_id']
                 user = User.objects.get(pk=user_id)

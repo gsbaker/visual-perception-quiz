@@ -23,5 +23,5 @@ class QuestionAnswerForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(QuestionAnswerForm, self).__init__(*args, **kwargs)
         question = self.initial['question']
-        self.fields['choices'] = forms.ModelChoiceField(queryset=question.choice_set.all(), widget=forms.RadioSelect, label="")
-        # self.fields['choices'].queryset = question.choice_set.all()
+        self.fields['choices'] = forms.ModelChoiceField(queryset=question.choice_set.all(), widget=forms.RadioSelect,
+                                                        label="", )
