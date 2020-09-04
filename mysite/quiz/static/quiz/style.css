@@ -1,12 +1,14 @@
 a:link {
-    color: black;
-    text-decoration: none;
-}
+  color: black;
+  text-decoration: none; }
 
 a:visited {
-    color: black;
-}
+  color: black; }
 
 a:hover {
-    cursor: default;
-}
+  cursor: default; }
+
+a p {
+  color: red; }
+
+/*# sourceMappingURL=style.css.map */
