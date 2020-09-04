@@ -127,15 +127,22 @@ class QuestionFormView(generic.CreateView):
         except (KeyError, Choice.DoesNotExist):
             return HttpResponseRedirect(reverse("quiz:qa-form", args=(current_question.pk, )))
         else:
-            # save the selected choice using session data
             user_id = self.request.session['user_id']
-            selected_id = str(user_id) + "-" + str(current_question.id)
-            self.request.session[selected_id] = selected_choice.id
             if selected_choice.correct:
-                # user_id = self.request.session['user_id']
-                user = User.objects.get(pk=user_id)
-                user.score += 1
-                user.save()
+                # check if this choice has already been selected
+                try:
+                    selected_id = str(user_id) + "-" + str(current_question.id)
+                    current_choice_id = self.request.session[selected_id]
+                except KeyError:
+                    # this hasn't been selected
+                    user = User.objects.get(pk=user_id)
+                    user.score += 1
+                    user.save()
+                    # save the selected choice using session data
+                    selected_id = str(user_id) + "-" + str(current_question.id)
+                    self.request.session[selected_id] = selected_choice.id
+                else:
+                    pass
 
         new_question_id = current_question.id + 1
         try:
