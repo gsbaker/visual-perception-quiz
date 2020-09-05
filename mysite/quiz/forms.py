@@ -8,6 +8,12 @@ class UserForm(ModelForm):
         model = User
         fields = ['name']
 
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        self.fields['name'] = forms.CharField(label="", widget=forms.TextInput(attrs={'placeholder': 'Name',
+                                                                                      'id': 'nameInput',
+                                                                                      'name': 'nameInput'}))
+
     def create_user(self):
         user = User()
         user.name = self.cleaned_data['name']

@@ -1,3 +1,7 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+
 <h2>{{ user_name }}</h2>
 
 <h3>Score: {{ user_score }}</h3>
@@ -7,7 +11,7 @@
 <table>
     {% for user in users %}
         {% if user.id == user_id %}
-            <tr style="color: red">
+            <tr style="color: red" class="current-user">
                 <td>{{ user.name }}</td>
                 <td>{{ user.score }}</td>
             </tr>
@@ -20,3 +24,5 @@
 
     {% endfor %}
 </table>
+
+{% endblock %}
