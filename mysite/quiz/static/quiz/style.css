@@ -37,4 +37,14 @@ ul {
   ul li {
     margin-bottom: 5px; }
 
+table {
+  border-collapse: collapse; }
+  table tr:hover {
+    background-color: #eee; }
+
+td, th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  font-size: 20px; }
+
 /*# sourceMappingURL=style.css.map */

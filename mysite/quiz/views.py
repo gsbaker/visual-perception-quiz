@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.views import generic
 from .models import User, Question, Choice, Answer
 from .forms import UserForm, QuestionAnswerForm
+from .scripts import find_high_score
 import logging
 
 # Create your views here.
@@ -136,9 +137,15 @@ class ResultsView(generic.DetailView):
     def get_context_data(self, **kwargs):
         user_id = self.request.session['user_id']
         user = User.objects.get(pk=user_id)
+        users_by_score = User.objects.all().order_by('-score')
+        score_list = []
+        for user in users_by_score:
+            score_list.append(user.score)
+        high_score = find_high_score(score_list)
         return {
             "user_id": user.id,
             "user_name": user.name,
             "user_score": user.score,
-            "users": User.objects.all().order_by('-score')
+            "users": User.objects.all().order_by('-score'),
+            "high_score": high_score
         }

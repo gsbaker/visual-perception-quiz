@@ -2,26 +2,42 @@
 
 {% block content %}
 
-<h2>{{ user_name }}</h2>
-
-<h3>Score: {{ user_score }}</h3>
+<h1>{{ user_name }}</h1>
 
 <h2>Leader Board</h2>
 
 <table>
+    <tr>
+        <th>Name</th>
+        <th>Score</th>
+    </tr>
+
     {% for user in users %}
-        {% if user.id == user_id %}
-            <tr style="color: red" class="current-user">
+        {% if user.score == high_score %}
+            {% if user.id == user_id %}
+               <tr style="color: red" class="current-user">
                 <td>{{ user.name }}</td>
                 <td>{{ user.score }}</td>
             </tr>
-        {% else %}
-             <tr>
+            {% else %}
+            <tr style="color: blue" class="high-score">
                 <td>{{ user.name }}</td>
                 <td>{{ user.score }}</td>
-             </tr>
+            </tr>
+            {% endif %}
+        {% else %}
+            {% if user.id == user_id %}
+              <tr style="color: red" class="current-user">
+                  <td>{{ user.name }}</td>
+                  <td>{{ user.score }}</td>
+              </tr>
+            {% else %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.score }}</td>
+                </tr>
+            {% endif %}
         {% endif %}
-
     {% endfor %}
 </table>
 
