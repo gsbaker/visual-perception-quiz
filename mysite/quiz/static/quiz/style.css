@@ -3,12 +3,7 @@ body {
   padding: 10px; }
 
 a {
-  color: black;
   text-decoration: none; }
-  a:visited {
-    color: black; }
-  a:hover {
-    cursor: default; }
 
 input[type="text"] {
   padding: 10px;
@@ -16,16 +11,30 @@ input[type="text"] {
   border: #eeeeee solid;
   border-radius: 10px; }
 
-input[type="submit"], input[type="button"] {
-  display: block;
-  margin-top: 20px;
+input[type="submit"], button {
+  display: inline-block;
+  margin-top: 5px;
   border: none;
   border-radius: 10px;
-  padding: 15px 20px 15px 20px;
-  color: white;
+  padding: 10px 15px 10px 15px;
   font-size: 20px;
-  font-weight: 600; }
-  input[type="submit"]:hover, input[type="button"]:hover {
+  font-weight: 600;
+  z-index: 100; }
+  input[type="submit"]:hover, button:hover {
     cursor: pointer; }
+  input[type="submit"] a, button a {
+    color: white; }
+    input[type="submit"] a:visited, button a:visited {
+      color: white; }
+
+.btn-blue {
+  background-color: #9DC3FB;
+  color: #02193B !important; }
+
+ul {
+  list-style: none;
+  padding: 0; }
+  ul li {
+    margin-bottom: 5px; }
 
 /*# sourceMappingURL=style.css.map */
