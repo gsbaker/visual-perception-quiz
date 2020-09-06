@@ -112,6 +112,12 @@ class QuestionFormView(generic.CreateView):
                     self.request.session[selected_id] = selected_choice.id
                 else:
                     pass
+            else:
+                user = User.objects.get(pk=user_id)
+                user.save()
+                # save the selected choice using session data
+                selected_id = str(user_id) + "-" + str(current_question.id)
+                self.request.session[selected_id] = selected_choice.id
 
         new_question_id = current_question.id + 1
         try:
