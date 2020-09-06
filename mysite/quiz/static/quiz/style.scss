@@ -56,11 +56,62 @@ table {
 
     tr:hover {
         background-color: #eee;
+        th {
+            background-color: white;
+        }
     }
 }
 
-td, th {
+td {
+    &:not(.current-user) {
+        border: 1px solid #ddd;
+    }
+    padding: 10px 50px 10px 10px;
+    font-size: 20px;
+}
+
+th {
     border: 1px solid #ddd;
+    border-bottom-color: darkgoldenrod;
     padding: 10px;
     font-size: 20px;
+}
+
+.high-score {
+    background-color: gold;
+    border-color: darkgoldenrod;
+    font-weight: 500;
+
+    td {
+        border-color: darkgoldenrod;
+    }
+
+    &:hover {
+        background-color: gold;
+    }
+
+    &.current-user {
+        background-color: goldenrod;
+        color: white;
+
+        &:hover {
+            background-color: goldenrod;
+        }
+    }
+}
+
+.current-user {
+    background-color: #BAD4F3;
+
+    //td {
+    //    border-color: grey;
+    //}
+
+    &:hover {
+        background-color: #BAD4F3;
+    }
+}
+
+.error {
+    color: red;
 }

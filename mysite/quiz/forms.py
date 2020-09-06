@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from .models import User, Answer
+from .scripts import check_user
 
 
 class UserForm(ModelForm):
@@ -17,8 +18,11 @@ class UserForm(ModelForm):
     def create_user(self):
         user = User()
         user.name = self.cleaned_data['name']
-        user.save()
-        return user
+        existing_users = User.objects.all()
+        if check_user(user, existing_users):
+            user.save()
+            return user
+        return False
 
 
 class QuestionAnswerForm(ModelForm):

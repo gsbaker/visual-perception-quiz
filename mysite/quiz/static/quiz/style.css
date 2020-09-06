@@ -41,10 +41,41 @@ table {
   border-collapse: collapse; }
   table tr:hover {
     background-color: #eee; }
+    table tr:hover th {
+      background-color: white; }
 
-td, th {
+td {
+  padding: 10px 50px 10px 10px;
+  font-size: 20px; }
+  td:not(.current-user) {
+    border: 1px solid #ddd; }
+
+th {
   border: 1px solid #ddd;
+  border-bottom-color: darkgoldenrod;
   padding: 10px;
   font-size: 20px; }
+
+.high-score {
+  background-color: gold;
+  border-color: darkgoldenrod;
+  font-weight: 500; }
+  .high-score td {
+    border-color: darkgoldenrod; }
+  .high-score:hover {
+    background-color: gold; }
+  .high-score.current-user {
+    background-color: goldenrod;
+    color: white; }
+    .high-score.current-user:hover {
+      background-color: goldenrod; }
+
+.current-user {
+  background-color: #BAD4F3; }
+  .current-user:hover {
+    background-color: #BAD4F3; }
+
+.error {
+  color: red; }
 
 /*# sourceMappingURL=style.css.map */

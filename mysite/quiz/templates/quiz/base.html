@@ -9,5 +9,13 @@
     {% block content %}
     {% endblock %}
 
+    {% if messages %}
+        <div class="error">
+        {% for message in messages %}
+            {{ message|safe }}
+        {% endfor %}
+        </div>
+    {% endif %}
+
 <script type="text/javascript" src="{% static 'quiz/script.js' %}"></script>
 </body>

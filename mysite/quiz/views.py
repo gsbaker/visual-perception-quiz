@@ -1,11 +1,12 @@
-from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
-from .models import User, Question, Choice, Answer
+from django.contrib import messages
+
 from .forms import UserForm, QuestionAnswerForm
+from .models import User, Question, Choice, Answer
 from .scripts import find_high_score
-import logging
+
 
 # Create your views here.
 
@@ -20,9 +21,14 @@ class IndexView(generic.FormView):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
         user = form.create_user()
+
+        if not user:  # check_user returned False
+            messages.error(self.request, "❌ This name is already taken! Try using your full name.")
+            return HttpResponseRedirect(reverse('quiz:index'))
+
         self.request.session['user_id'] = user.id
 
-        return HttpResponseRedirect(reverse('quiz:qa-form', args=(1, )))
+        return HttpResponseRedirect(reverse('quiz:qa-form', args=(1,)))
 
 
 class QuestionFormView(generic.CreateView):
@@ -95,7 +101,7 @@ class QuestionFormView(generic.CreateView):
         try:
             selected_choice = current_question.choice_set.get(pk=form.cleaned_data['choices'].id)
         except (KeyError, Choice.DoesNotExist):
-            return HttpResponseRedirect(reverse("quiz:qa-form", args=(current_question.pk, )))
+            return HttpResponseRedirect(reverse("quiz:qa-form", args=(current_question.pk,)))
         else:
             user_id = self.request.session['user_id']
             if selected_choice.correct:
@@ -127,7 +133,7 @@ class QuestionFormView(generic.CreateView):
             user_id = self.request.session['user_id']
             return HttpResponseRedirect(reverse("quiz:results", args=(user_id,)))
 
-        return HttpResponseRedirect(reverse("quiz:qa-form", args=(new_question_id, )))
+        return HttpResponseRedirect(reverse("quiz:qa-form", args=(new_question_id,)))
 
 
 class ResultsView(generic.DetailView):

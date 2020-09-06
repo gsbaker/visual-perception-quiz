@@ -2,9 +2,8 @@
 
 {% block content %}
 
-<h1>{{ current_user.name }}</h1>
 
-<h2>Leader Board</h2>
+<h1>Leaderboard</h1>
 
 <table>
     <tr>
@@ -14,20 +13,20 @@
 
     {% for user in users %}
         {% if user.score == high_score %}
-            {% if user.id == user_id %}
-               <tr style="color: red" class="current-user">
-                <td>{{ user.name }}</td>
+            {% if user.id == current_user.id %}
+               <tr class="high-score current-user">
+                <td>👑 {{ user.name }}</td>
                 <td>{{ user.score }}</td>
             </tr>
             {% else %}
-            <tr style="color: blue" class="high-score">
-                <td>{{ user.name }}</td>
+            <tr class="high-score">
+                <td>👑 {{ user.name }}</td>
                 <td>{{ user.score }}</td>
             </tr>
             {% endif %}
         {% else %}
             {% if user.id == current_user.id %}
-              <tr style="color: red" class="current-user">
+              <tr class="current-user">
                   <td>{{ user.name }}</td>
                   <td>{{ user.score }}</td>
               </tr>
