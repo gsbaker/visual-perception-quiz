@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>{{ user_name }}</h1>
+<h1>{{ current_user.name }}</h1>
 
 <h2>Leader Board</h2>
 
@@ -26,7 +26,7 @@
             </tr>
             {% endif %}
         {% else %}
-            {% if user.id == user_id %}
+            {% if user.id == current_user.id %}
               <tr style="color: red" class="current-user">
                   <td>{{ user.name }}</td>
                   <td>{{ user.score }}</td>
