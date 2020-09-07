@@ -89,42 +89,41 @@ class QuestionFormView(generic.CreateView):
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
+        current_user = User.objects.get(pk=self.request.session['user_id'])
         current_question = Question.objects.get(pk=self.kwargs['pk'])
-
-        # get the name of submit input
-        if 'next' in self.request.POST:
-            pass
-        elif 'prev' in self.request.POST:
-            prev_question_id = current_question.id - 1
-            return HttpResponseRedirect(reverse("quiz:qa-form", args=(prev_question_id,)))
 
         try:
             selected_choice = current_question.choice_set.get(pk=form.cleaned_data['choices'].id)
         except (KeyError, Choice.DoesNotExist):
             return HttpResponseRedirect(reverse("quiz:qa-form", args=(current_question.pk,)))
         else:
-            user_id = self.request.session['user_id']
             if selected_choice.correct:
                 # check if this choice has already been selected
                 try:
-                    selected_id = str(user_id) + "-" + str(current_question.id)
-                    current_choice_id = self.request.session[selected_id]
+                    user_choice_key = str(current_user.id) + "-" + str(current_question.id)
+                    previous_choice = current_question.choice_set.get(pk=self.request.session[user_choice_key])
+                    if previous_choice == selected_choice:
+                        pass
+                    else:
+                        # save the selected choice using session data
+                        user_choice_key = str(current_user.id) + "-" + str(current_question.id)
+                        self.request.session[user_choice_key] = selected_choice.id
+                        # this hasn't been selected
+                        current_user.score += 1
+                        current_user.save()
                 except KeyError:
-                    # this hasn't been selected
-                    user = User.objects.get(pk=user_id)
-                    user.score += 1
-                    user.save()
                     # save the selected choice using session data
-                    selected_id = str(user_id) + "-" + str(current_question.id)
-                    self.request.session[selected_id] = selected_choice.id
+                    user_choice_key = str(current_user.id) + "-" + str(current_question.id)
+                    self.request.session[user_choice_key] = selected_choice.id
+                    # this hasn't been selected
+                    current_user.score += 1
+                    current_user.save()
                 else:
                     pass
             else:
-                user = User.objects.get(pk=user_id)
-                user.save()
                 # save the selected choice using session data
-                selected_id = str(user_id) + "-" + str(current_question.id)
-                self.request.session[selected_id] = selected_choice.id
+                user_choice_key = str(current_user.id) + "-" + str(current_question.id)
+                self.request.session[user_choice_key] = selected_choice.id
 
         new_question_id = current_question.id + 1
         try:

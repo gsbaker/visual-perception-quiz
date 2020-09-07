@@ -54,7 +54,8 @@ th {
   border: 1px solid #ddd;
   border-bottom-color: darkgoldenrod;
   padding: 10px;
-  font-size: 20px; }
+  font-size: 20px;
+  text-align: left; }
 
 .high-score {
   background-color: gold;
