@@ -2,7 +2,8 @@ body {
   font-family: 'Inconsolata', monospace;
   padding: 10px;
   background-color: #4747FF;
-  color: white; }
+  color: white;
+  font-size: 20px; }
 
 a {
   text-decoration: none; }
@@ -34,7 +35,7 @@ input[type="submit"], button {
     input[type="submit"] a:visited, button a:visited {
       color: white; }
 
-.btn-blue {
+.btn-white {
   display: inline-block;
   background-color: #4747FF;
   color: white !important;

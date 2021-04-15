@@ -14,15 +14,15 @@
 
     {% if previous_question %}
         <div>
-        <button type="submit" class="btn-blue">
+        <button type="submit" class="btn-white">
             <a href="../{{ previous_question.id }}">Previous</a>
         </button>
     {% endif %}
     {% if next_question %}
-        <input type="submit" name="next" value="Next" class="btn-blue">
+        <input type="submit" name="next" value="Next" class="btn-white">
         </div>
     {% else %}
-        <input type="submit" name="next" value="Submit" class="btn-blue">
+        <input type="submit" name="next" value="Submit" class="btn-white">
     {% endif %}
 </form>
 {% endblock %}
