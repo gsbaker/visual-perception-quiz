@@ -1,6 +1,11 @@
+$background-color: #4747FF;
+$highlight-color: #FFC2C2;
+
 body {
-    font-family: "Helvetica Neue", sans-serif;
+    font-family: 'Inconsolata', monospace;
     padding: 10px;
+    background-color: $background-color;
+    color: white;
 }
 
 a {
@@ -8,14 +13,23 @@ a {
 }
 
 input[type="text"] {
+    background-color: $background-color;
+    color: white;
     padding: 10px;
-    font-size: 20px;
-    border: #eeeeee solid;
-    border-radius: 10px;
+    font-size: 30px;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    border: none;
+    //border: 1px solid black;
+    //border-radius: 10px;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 input[type="submit"], button {
-    display: inline-block;
     margin-top: 5px;
     border: none;
     border-radius: 10px;
@@ -37,8 +51,10 @@ input[type="submit"], button {
 }
 
 .btn-blue {
-    background-color: #9DC3FB;
-    color: #02193B !important;
+    display: inline-block;
+    background-color: $background-color;
+    color: white !important;
+    text-decoration: underline;
 }
 
 ul {
@@ -50,16 +66,20 @@ ul {
     }
 }
 
+#radio-container {
+    display: block;
+    margin: 0 auto;
+}
+
+#radio-content {
+    display: inline-block;
+    text-align: left;
+}
 
 table {
     border-collapse: collapse;
+    display: inline-block;
 
-    tr:hover {
-        background-color: #eee;
-        th {
-            background-color: white;
-        }
-    }
 }
 
 td {
@@ -79,7 +99,8 @@ th {
 }
 
 .high-score {
-    background-color: gold;
+    background-color: #FFE75C;
+    color: black;
     border-color: darkgoldenrod;
     font-weight: 500;
 
@@ -87,32 +108,27 @@ th {
         border-color: darkgoldenrod;
     }
 
-    &:hover {
-        background-color: gold;
-    }
-
     &.current-user {
-        background-color: goldenrod;
-        color: white;
-
-        &:hover {
-            background-color: goldenrod;
-        }
+        background-color: #E0BF00;
+        color: black;
     }
 }
 
 .current-user {
-    background-color: #BAD4F3;
-
-    //td {
-    //    border-color: grey;
-    //}
-
-    &:hover {
-        background-color: #BAD4F3;
-    }
+    background-color: #8585FF;
+    color: black;
 }
 
 .error {
-    color: red;
+    display: inline-block;
+    background-color: #FF4747;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+::selection {
+  background: $highlight-color; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: $highlight-color; /* Gecko Browsers */
 }

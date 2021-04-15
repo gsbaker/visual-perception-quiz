@@ -23,7 +23,7 @@ class IndexView(generic.FormView):
         user = form.create_user()
 
         if not user:  # check_user returned False
-            messages.error(self.request, "❌ This name is already taken! Try using your full name.")
+            messages.error(self.request, "Oops! This name is already taken... try using your full name.")
             return HttpResponseRedirect(reverse('quiz:index'))
 
         self.request.session['user_id'] = user.id
