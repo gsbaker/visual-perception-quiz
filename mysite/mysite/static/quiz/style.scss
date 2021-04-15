@@ -1,0 +1,118 @@
+body {
+    font-family: "Helvetica Neue", sans-serif;
+    padding: 10px;
+}
+
+a {
+    text-decoration: none;
+}
+
+input[type="text"] {
+    padding: 10px;
+    font-size: 20px;
+    border: #eeeeee solid;
+    border-radius: 10px;
+}
+
+input[type="submit"], button {
+    display: inline-block;
+    margin-top: 5px;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 15px 10px 15px;
+    font-size: 20px;
+    font-weight: 600;
+    z-index: 100;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    a {
+        color: white;
+        &:visited {
+            color: white;
+        }
+    }
+}
+
+.btn-blue {
+    background-color: #9DC3FB;
+    color: #02193B !important;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+        margin-bottom: 5px;
+    }
+}
+
+
+table {
+    border-collapse: collapse;
+
+    tr:hover {
+        background-color: #eee;
+        th {
+            background-color: white;
+        }
+    }
+}
+
+td {
+    &:not(.current-user) {
+        border: 1px solid #ddd;
+    }
+    padding: 10px 50px 10px 10px;
+    font-size: 20px;
+}
+
+th {
+    border: 1px solid #ddd;
+    border-bottom-color: darkgoldenrod;
+    padding: 10px;
+    font-size: 20px;
+    text-align: left;
+}
+
+.high-score {
+    background-color: gold;
+    border-color: darkgoldenrod;
+    font-weight: 500;
+
+    td {
+        border-color: darkgoldenrod;
+    }
+
+    &:hover {
+        background-color: gold;
+    }
+
+    &.current-user {
+        background-color: goldenrod;
+        color: white;
+
+        &:hover {
+            background-color: goldenrod;
+        }
+    }
+}
+
+.current-user {
+    background-color: #BAD4F3;
+
+    //td {
+    //    border-color: grey;
+    //}
+
+    &:hover {
+        background-color: #BAD4F3;
+    }
+}
+
+.error {
+    color: red;
+}
