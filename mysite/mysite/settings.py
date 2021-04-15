@@ -26,7 +26,7 @@ SECRET_KEY = 'b-@zkmhnd%$x4!a1=xua+f*cv=szg$q=9gnx-pgz09xq89v)i3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['138.68.173.162', 'quiz.gsbaker.uk']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '138.68.173.162', 'quiz.gsbaker.uk']
 
 
 # Application definition

@@ -138,4 +138,7 @@ pyvenv.cfg
 .idea/
 
 # .sass-cache
+static/quiz/.sass-cache/
+mysite/static/quiz/.sass-cache/
+
 mysite/quiz/static/quiz/.sass-cache/
