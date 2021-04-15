@@ -5,10 +5,16 @@
 
 <form method="post">
     {% csrf_token %}
-    {{ form }}
+
+    <div id="radio-container">
+        <div id="radio-content">
+            {{ form }}
+        </div>
+    </div>
+
     {% if previous_question %}
         <div>
-        <button type="submit">
+        <button type="submit" class="btn-blue">
             <a href="../{{ previous_question.id }}">Previous</a>
         </button>
     {% endif %}

@@ -1,18 +1,25 @@
 body {
-  font-family: "Helvetica Neue", sans-serif;
-  padding: 10px; }
+  font-family: 'Inconsolata', monospace;
+  padding: 10px;
+  background-color: #4747FF;
+  color: white; }
 
 a {
   text-decoration: none; }
 
 input[type="text"] {
+  background-color: #4747FF;
+  color: white;
   padding: 10px;
-  font-size: 20px;
-  border: #eeeeee solid;
-  border-radius: 10px; }
+  font-size: 30px;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  border: none; }
+  input[type="text"]:focus {
+    outline: none; }
 
 input[type="submit"], button {
-  display: inline-block;
   margin-top: 5px;
   border: none;
   border-radius: 10px;
@@ -28,8 +35,10 @@ input[type="submit"], button {
       color: white; }
 
 .btn-blue {
-  background-color: #9DC3FB;
-  color: #02193B !important; }
+  display: inline-block;
+  background-color: #4747FF;
+  color: white !important;
+  text-decoration: underline; }
 
 ul {
   list-style: none;
@@ -37,12 +46,17 @@ ul {
   ul li {
     margin-bottom: 5px; }
 
+#radio-container {
+  display: block;
+  margin: 0 auto; }
+
+#radio-content {
+  display: inline-block;
+  text-align: left; }
+
 table {
-  border-collapse: collapse; }
-  table tr:hover {
-    background-color: #eee; }
-    table tr:hover th {
-      background-color: white; }
+  border-collapse: collapse;
+  display: inline-block; }
 
 td {
   padding: 10px 50px 10px 10px;
@@ -58,25 +72,32 @@ th {
   text-align: left; }
 
 .high-score {
-  background-color: gold;
+  background-color: #FFE75C;
+  color: black;
   border-color: darkgoldenrod;
   font-weight: 500; }
   .high-score td {
     border-color: darkgoldenrod; }
-  .high-score:hover {
-    background-color: gold; }
   .high-score.current-user {
-    background-color: goldenrod;
-    color: white; }
-    .high-score.current-user:hover {
-      background-color: goldenrod; }
+    background-color: #E0BF00;
+    color: black; }
 
 .current-user {
-  background-color: #BAD4F3; }
-  .current-user:hover {
-    background-color: #BAD4F3; }
+  background-color: #8585FF;
+  color: black; }
 
 .error {
-  color: red; }
+  display: inline-block;
+  background-color: #FF4747;
+  padding: 10px;
+  border-radius: 10px; }
+
+::selection {
+  background: #FFC2C2;
+  /* WebKit/Blink Browsers */ }
+
+::-moz-selection {
+  background: #FFC2C2;
+  /* Gecko Browsers */ }
 
 /*# sourceMappingURL=style.css.map */
