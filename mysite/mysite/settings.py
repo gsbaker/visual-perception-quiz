@@ -76,11 +76,11 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'quiz',
-        'USER': 'gsbaker',
-        'PASSWORD': 'd=sC^9yszej<ND!',
-        'HOST': 'db',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'quizdb',
+        'USER': 'quizuser',
+        'PASSWORD': 'django123',
+        'HOST': 'localhost',
         'PORT': 5432,
     }
 }
