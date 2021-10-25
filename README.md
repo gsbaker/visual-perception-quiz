@@ -1,8 +1,8 @@
-# quiz
-10 questions about me (with a leaderboard)!
+# Visual Perception Quiz
+
+A simple quiz created as part of a research project looking into visual perception.
 
 ## Installing Dependencies
 ```
-install -r requirements.txt
+pip install -r requirements.txt
 ```
-
