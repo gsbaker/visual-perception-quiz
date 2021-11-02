@@ -13,7 +13,6 @@ from .scripts import find_high_score
 
 class IndexView(generic.FormView):
     form_class = UserForm
-    model = User
     template_name = 'quiz/index.html'
     context_object_name = 'user'
 

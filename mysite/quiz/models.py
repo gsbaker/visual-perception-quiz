@@ -5,11 +5,7 @@ from django.urls import reverse
 
 
 class User(models.Model):
-    name = models.CharField(max_length=200)
     score = models.IntegerField(default=0)
-
-    def __str__(self):
-        return self.name
 
 
 class Question(models.Model):

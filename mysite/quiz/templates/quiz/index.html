@@ -1,15 +1,14 @@
 {% extends 'quiz/base.html' %}
 
 {% block content %}
+    <h1>Visual Perception Quiz</h1>
+    <p>Some info here...</p>
 <form method="post">
     <div class="form-group">
         {% csrf_token %}
         {{ form }}
     </div>
-
-
     <input type="submit" value="Continue" class="btn btn-primary mt-4">
-
 </form>
 
 {% endblock %}
