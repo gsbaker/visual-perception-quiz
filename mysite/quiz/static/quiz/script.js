@@ -1,15 +1,25 @@
 function updateProgress(progressBarElement, progressBarMessageElement, progress) {
   progressBarElement.style.width = progress.percent + "%";
-  progressBarMessageElement.innerHTML = (progress.current / progress.total) * 100 + "%";
+  progressBarMessageElement.innerHTML = Math.round((progress.current / progress.total) * 100) + "%";
 }
 
 
-let bar = document.getElementById("progress-bar");
-let barMessage = document.getElementById("progress-bar-message");
+let bar1 = document.getElementById("progress-bar-1");
+let barMessage1 = document.getElementById("progress-bar-1-message");
 for (let i = 0; i < 11; i ++) {
-    setTimeout(updateProgress, 500 * i, bar, barMessage, {
-        percent: 10 * i,
-        current: 10 * i,
+    setTimeout(updateProgress, 80 * i, bar1, barMessage1, {
+        percent: 8.2 * i,
+        current: 8.2 * i,
+        total: 100
+    })
+}
+
+let bar2 = document.getElementById("progress-bar-2");
+let barMessage2 = document.getElementById("progress-bar-2-message");
+for (let i = 0; i < 11; i ++) {
+    setTimeout(updateProgress, 80 * i, bar2, barMessage2, {
+        percent: 2.8 * i,
+        current: 2.8 * i,
         total: 100
     })
 }

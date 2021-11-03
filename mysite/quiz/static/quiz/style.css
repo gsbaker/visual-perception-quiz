@@ -1,9 +1,16 @@
 #nameInput {
   max-width: 500px; }
 
-#progress-bar {
+.progress-bar-container {
+  width: 100%;
+  height: 10px;
+  background-color: lightgray;
+  border-radius: 10px; }
+
+.progress-bar {
   margin-top: 1em;
   border-radius: 10px;
-  width: 0; }
+  width: 0;
+  height: 10px; }
 
 /*# sourceMappingURL=style.css.map */
