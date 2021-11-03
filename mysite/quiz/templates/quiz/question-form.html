@@ -19,10 +19,15 @@
         </button>
     {% endif %}
     {% if next_question %}
-        <input type="submit" name="next" value="Next" class="btn-white">
+        <input type="submit" name="next" value="Next" class="btn btn-primary">
         </div>
     {% else %}
-        <input type="submit" name="next" value="Submit" class="btn-white">
+        <input type="submit" name="next" value="Submit" class="btn btn-primary">
     {% endif %}
 </form>
+
+<div id="progress-wrapper" class="mt-5">
+    <div id="progress-bar" class="bg-primary">&nbsp;</div>
+  <div id="progress-bar-message">Waiting for progress to start...</div>
+</div>
 {% endblock %}
