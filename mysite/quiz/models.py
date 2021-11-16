@@ -19,6 +19,7 @@ class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     correct = models.BooleanField(default=False)
     choice_text = models.CharField(max_length=200)
+    percentage = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.choice_text)

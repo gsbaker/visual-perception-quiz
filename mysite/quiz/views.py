@@ -57,7 +57,9 @@ class QuestionFormView(generic.CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         current_question = Question.objects.get(pk=self.kwargs['pk'])
+        image_path = "quiz/lines-" + str(current_question.id) + ".jpg"
         context['current_question'] = current_question
+        context['image_path'] = image_path
 
         # try and get a previous question
         try:
