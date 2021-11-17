@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
 from django.contrib import messages
+from django.core import serializers
 
 from .forms import UserForm, QuestionAnswerForm
 from .models import User, Question, Choice, Answer
@@ -57,9 +58,12 @@ class QuestionFormView(generic.CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         current_question = Question.objects.get(pk=self.kwargs['pk'])
+        choices_set = current_question.choice_set.all()
+        choices_json = serializers.serialize("json", choices_set)
         image_path = "quiz/lines-" + str(current_question.id) + ".jpg"
         context['current_question'] = current_question
         context['image_path'] = image_path
+        context['choices_json'] = choices_json
 
         # try and get a previous question
         try:
