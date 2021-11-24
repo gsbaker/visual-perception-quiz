@@ -1,0 +1,11 @@
+{% extends 'quiz/base.html' %}
+
+{% block content %}
+
+    <h1>Thank you for completing Section {{ current_section }}</h1>
+
+    <p>Please click 'Next' when you are ready to move on to the next section.</p>
+
+    <a href="/{{ next_question_id }}" role="button" class="btn btn-lg btn-outline-primary">Next</a>
+
+{% endblock %}

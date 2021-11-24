@@ -9,6 +9,7 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     # ex: /quiz/questions/
     # path('<int:pk>/', views.DetailView.as_view(), name='detail'),
-    path('<int:pk>/', views.QuestionFormView.as_view(), name='qa-form'),
+    path('<int:pk>/', views.QuestionFormView.as_view(), name='question_form'),
+    path('continue/', views.InfoView.as_view(), name='info_view'),
     path('results/<int:pk>/', views.ResultsView.as_view(), name='results'),
 ]

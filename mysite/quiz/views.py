@@ -28,7 +28,7 @@ class IndexView(generic.FormView):
 
         self.request.session['user_id'] = user.id
 
-        return HttpResponseRedirect(reverse('quiz:qa-form', args=(1,)))
+        return HttpResponseRedirect(reverse('quiz:question_form', args=(1,)))
 
 
 class QuestionFormView(generic.CreateView):
@@ -89,7 +89,7 @@ class QuestionFormView(generic.CreateView):
         current_question = Question.objects.get(pk=self.kwargs['pk'])
         if 'prev' in self.request.POST:
             prev_question_id = current_question.id - 1
-            return HttpResponseRedirect(reverse("quiz:qa-form", args=(prev_question_id,)))
+            return HttpResponseRedirect(reverse("quiz:question_form", args=(prev_question_id,)))
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
@@ -100,7 +100,7 @@ class QuestionFormView(generic.CreateView):
         try:
             selected_choice = current_question.choice_set.get(pk=form.cleaned_data['choices'].id)
         except (KeyError, Choice.DoesNotExist):
-            return HttpResponseRedirect(reverse("quiz:qa-form", args=(current_question.pk,)))
+            return HttpResponseRedirect(reverse("quiz:question_form", args=(current_question.pk,)))
         else:
             if selected_choice.correct:
                 # check if this choice has already been selected
@@ -137,7 +137,24 @@ class QuestionFormView(generic.CreateView):
             user_id = self.request.session['user_id']
             return HttpResponseRedirect(reverse("quiz:results", args=(user_id,)))
 
-        return HttpResponseRedirect(reverse("quiz:qa-form", args=(new_question_id,)))
+        if current_question.id % 10 == 0:
+            self.request.session['current_question'] = current_question.id
+            return HttpResponseRedirect(reverse("quiz:info_view"))
+
+        return HttpResponseRedirect(reverse("quiz:question_form", args=(new_question_id,)))
+
+
+class InfoView(generic.TemplateView):
+    template_name = 'quiz/info_view.html'
+
+    def get_context_data(self, **kwargs):
+        current_question_id = self.request.session['current_question']
+        current_section = int(current_question_id / 10)
+        next_question_id = current_question_id + 1
+        return {
+            "current_section": current_section,
+            "next_question_id": next_question_id,
+        }
 
 
 class ResultsView(generic.DetailView):
