@@ -26,6 +26,6 @@ class Command(BaseCommand, ABC):
 
             for i in range(1, 5):
                 choice = Choice()
-                choice.choice_text = "Choice {}".format(self.alpha_num_dict.get(i))
+                choice.choice_text = "Line {}".format(self.alpha_num_dict.get(i))
                 choice.question = question
                 choice.save()
