@@ -60,7 +60,7 @@ class QuestionFormView(generic.CreateView):
         current_question = Question.objects.get(pk=self.kwargs['pk'])
         choices_set = current_question.choice_set.all()
         choices_json = serializers.serialize("json", choices_set)
-        image_path = "quiz/lines-" + str(current_question.id) + ".jpg"
+        image_path = "quiz/lines/lines-" + str(current_question.id) + ".jpg"
         context['current_question'] = current_question
         context['image_path'] = image_path
         context['choices_json'] = choices_json
