@@ -142,3 +142,6 @@ static/quiz/.sass-cache/
 mysite/quiz/static/quiz/.sass-cache/
 
 mysite/quiz/static/quiz/.sass-cache/
+
+.DS_Store
+._*
