@@ -34,7 +34,7 @@ class IndexView(generic.FormView):
 class QuestionFormView(generic.CreateView):
     form_class = QuestionAnswerForm
     model = Answer
-    template_name = 'quiz/question-form.html'
+    template_name = 'quiz/detail.html'
 
     def get_initial(self):
         initial = super(QuestionFormView, self).get_initial()
@@ -59,20 +59,13 @@ class QuestionFormView(generic.CreateView):
         context = super().get_context_data(**kwargs)
         current_question = Question.objects.get(pk=self.kwargs['pk'])
         choices_set = current_question.choice_set.all()
+        sorted_choices_set = sorted(choices_set, key=lambda x: x.choice_text[-1])
         choices_json = serializers.serialize("json", choices_set)
         image_path = "quiz/lines/lines-" + str(current_question.id) + ".jpg"
         context['current_question'] = current_question
         context['image_path'] = image_path
         context['choices_json'] = choices_json
-
-        # try and get a previous question
-        try:
-            prev_id = current_question.id - 1
-            prev_question = Question.objects.get(pk=prev_id)
-        except (KeyError, Question.DoesNotExist):
-            pass
-        else:
-            context['previous_question'] = prev_question
+        context['sorted_choices_set'] = sorted_choices_set
 
         # try and get a next question
         try:

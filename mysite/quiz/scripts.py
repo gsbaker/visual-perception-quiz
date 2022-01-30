@@ -4,3 +4,8 @@ def find_high_score(scores):
         if score > high_score:
             high_score = score
     return high_score
+
+
+def get_sorted_choice_set(question):
+    choice_set = question.choice_set.all()
+    print(choice_set)
