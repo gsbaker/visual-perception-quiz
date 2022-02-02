@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.views import generic
 
 from .forms import QuestionAnswerForm, UserForm
-from .models import User, Question, Choice, Answer
+from .models import User, Question, Choice, Answer, IncorrectChoice
 
 
 # Create your views here.
@@ -111,6 +111,13 @@ class QuestionFormView(generic.CreateView):
 
         return HttpResponseRedirect(reverse("quiz:question_form", args=(new_question_id,)))
 
+    def save_incorrect_choice(self, choice):
+        incorrect_choice = IncorrectChoice()
+        incorrect_choice.question = self.get_current_question()
+        incorrect_choice.choice = choice
+        incorrect_choice.user = self.get_current_user()
+        incorrect_choice.save()
+
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
@@ -120,7 +127,7 @@ class QuestionFormView(generic.CreateView):
         selected_choice = self.get_selected_choice(form)
         # check for an incorrect answer
         if not selected_choice.correct:
-            pass
+            self.save_incorrect_choice(selected_choice)
         # save the selected choice
         self.save_choice(selected_choice)
         return self.get_new_question()
