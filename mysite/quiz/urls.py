@@ -11,5 +11,5 @@ urlpatterns = [
     # path('<int:pk>/', views.DetailView.as_view(), name='detail'),
     path('<int:pk>/', views.QuestionFormView.as_view(), name='question_form'),
     path('continue/', views.InfoView.as_view(), name='info_view'),
-    path('results/<int:pk>/', views.ResultsView.as_view(), name='results'),
+    path('complete/', views.CompleteView.as_view(), name='complete'),
 ]

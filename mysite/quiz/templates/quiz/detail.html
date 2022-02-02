@@ -1,86 +1,49 @@
 {% extends 'quiz/base.html' %}
 
 {% block content %}
-
     <div class="text-center">
         {% load static %} <img src="{% static image_path %}" class="img-fluid rounded" alt="Lines" id="lines-image">
-
         <div id="percentages-box" class="m-auto mt-4 p-3">
-        <h5>How others answered</h5>
-        {% for choice in sorted_choices_set %}
-            <div class="d-flex justify-content-center align-items-center mt-3">
-                <p class="m-0 p-1">{{ choice.choice_text }}</p>
-{#                <div class="progress-bar-container">#}
-{#                    <div id="progress-bar-{{ forloop.counter }}" class="bg-primary progress-bar">&nbsp</div>#}
-{#                </div>#}
-{#                <div id="progress-bar-{{ forloop.counter }}-message">Waiting for answers...</div>#}
-{#            </div>#}
-                <div class="w-75 p-1">
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: {{ choice.percentage }}%;" aria-valuenow="{{ choice.percentage }}" aria-valuemin="0" aria-valuemax="100">
-                            {{ choice.percentage }}%
+            <h5>How others answered</h5>
+            {% for choice in sorted_choices_set %}
+                <div class="d-flex justify-content-center align-items-center mt-3">
+                    <p class="m-0 p-1">{{ choice.choice_text }}</p>
+                    {#                <div class="progress-bar-container">#}
+                    {#                    <div id="progress-bar-{{ forloop.counter }}" class="bg-primary progress-bar">&nbsp</div>#}
+                    {#                </div>#}
+                    {#                <div id="progress-bar-{{ forloop.counter }}-message">Waiting for answers...</div>#}
+                    {#            </div>#}
+                    <div class="w-75 p-1">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ choice.percentage }}%;"
+                                 aria-valuenow="{{ choice.percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                {{ choice.percentage }}%
+                            </div>
                         </div>
                     </div>
                 </div>
+            {% endfor %}
+        </div>
+        <h4 class="mt-4">{{ current_question.question_text }}</h4>
+        <form method="post">
+            {% csrf_token %}
+{#            {{ form }}#}
+            {{ form.non_field_errors }}
 
+            {% for hidden_field in form.hidden_fields %}
+                {{ hidden_field.errors }}
+                {{ hidden_field }}
+            {% endfor %}
+
+            <ul class="list-unstyled">
+                {% for choice in form.choices %}
+                    <li class="fs-5"> {{ choice.tag }} {{ choice.choice_label }}</li>
+                {% endfor %}
+            </ul>
+
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <input type="submit" name="next" value="Next" class="btn btn-primary btn-lg mt-2">
             </div>
-
-        {% endfor %}
+        </form>
     </div>
-
-
-    <h4 class="mt-4">{{ current_question.question_text }}</h4>
-    <form method="post">
-                    {% csrf_token %}
-
-                        {#                        {{ form }}#}
-                        {{ form.non_field_errors }}
-
-                        {% for hidden_field in form.hidden_fields %}
-                            {{ hidden_field.errors }}
-                            {{ hidden_field }}
-                        {% endfor %}
-
-                            <ul class="list-unstyled">
-                                {% for choice in form.choices %}
-                                    <li class="fs-5"> {{ choice.tag }} {{ choice.choice_label }}</li>
-                                {% endfor %}
-                            </ul>
-                    {% if next_question %}
-                        <div class="d-grid gap-2 col-6 mx-auto">
-                            <input type="submit" name="next" value="Next" class="btn btn-primary btn-lg mt-2">
-                        </div>
-                    {% else %}
-                        <div class="d-grid gap-2 col-6 mx-auto">
-                            <input type="submit" name="next" value="Submit" class="btn btn-primary btn-lg mt-2">
-                        </div>
-                    {% endif %}
-                </form>
-
-    </div>
-
-    <script>
-        function updateProgress(progressBarElement, progressBarMessageElement, progress) {
-            progressBarElement.style.width = progress.percent + "%";
-            progressBarMessageElement.innerHTML = Math.round((progress.current / progress.total) * 100) + "%";
-        }
-
-        function generateProgress(choices) {
-            for (let i = 0; i < choices.length; i++) {
-                let percentage = choices[i].fields.percentage;
-                let progressBar = document.getElementById("progress-bar-" + (i + 1));
-                let progressBarMessage = document.getElementById("progress-bar-" + (i + 1) + "-message");
-                for (let i = 0; i < 11; i++) {
-                    setTimeout(updateProgress, 80 * i, progressBar, progressBarMessage, {
-                        percent: (percentage / 10) * i,
-                        current: (percentage / 10) * i,
-                        total: 100
-                    })
-                }
-            }
-        }
-
-        setTimeout(() => generateProgress({{ choices_json|safe }}), 1000);
-    </script>
-
 {% endblock %}

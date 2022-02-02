@@ -19,9 +19,11 @@ class Command(BaseCommand, ABC):
                 question_id = row[0]
                 percentages = row[1:]
                 question = Question.objects.get(pk=int(question_id))
-                choices = question.choice_set.all()
+                choices = question.choice_set.order_by('choice_text')
                 index = 0
                 for choice in choices:
                     choice.percentage = int(percentages[index])
                     choice.save()
                     index += 1
+
+                question.save()
