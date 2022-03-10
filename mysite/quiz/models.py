@@ -1,10 +1,15 @@
+import os
+
 from django.db import models
 from django.urls import reverse
+from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 
 
 class User(models.Model):
+    used_question_ids = ArrayField(models.IntegerField(), default=list)
+
     def __str__(self):
         return "User #" + str(self.id)
 
@@ -19,10 +24,11 @@ class User(models.Model):
 
 
 class Question(models.Model):
+    section_number = models.IntegerField(default=1)
     question_text = models.CharField(max_length=200)
 
     def __str__(self):
-        return str(self.id) + ". " + self.question_text
+        return str(self.id) + '. ' + self.question_text + ' (' + str(self.section_number) + ')'
 
 
 class Choice(models.Model):
@@ -32,6 +38,8 @@ class Choice(models.Model):
     percentage = models.IntegerField(default=0)
 
     def __str__(self):
+        if os.environ['DJANGO_SETTINGS_MODULE'] == 'mysite.settings.dev':
+            return str(self.question.id) + '.' + str(self.choice_text)
         return str(self.choice_text)
 
 

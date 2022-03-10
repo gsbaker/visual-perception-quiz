@@ -1,3 +1,5 @@
+import random
+
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
@@ -31,6 +33,7 @@ class QuestionFormView(generic.CreateView):
     form_class = QuestionAnswerForm
     model = Answer
     template_name = 'quiz/detail.html'
+    questions_count = 83
 
     def get_initial(self):
         initial = super(QuestionFormView, self).get_initial()
@@ -97,18 +100,55 @@ class QuestionFormView(generic.CreateView):
         self.request.session[user_choice_key] = choice.id
         self.get_current_user().save()
 
+    def is_questions_empty(self):
+        user = self.get_current_user()
+        if len(user.used_question_ids) == self.questions_count:
+            return True
+        return False
+
+    def get_random_question_id(self):
+        user = self.get_current_user()
+        questions = Question.objects.all()
+        while True:
+            question = random.choice(questions)
+            if question.id not in user.used_question_ids and question.id > 3:
+                return question.id
+
+    def get_info_view(self, new_question_id, current_section):
+        self.request.session['current_question'] = self.get_current_question().id
+        self.request.session['current_section'] = current_section
+        self.request.session['next_question_id'] = new_question_id
+        return HttpResponseRedirect(reverse("quiz:info_view"))
+
+    def add_to_used_ids(self, question):
+        user = self.get_current_user()
+        user.used_question_ids.append(question.id)
+        user.save()
+
+    def get_used_questions_ids(self):
+        user = self.get_current_user()
+        return user.used_question_ids
+
     def get_new_question(self):
-        new_question_id = self.get_current_question().id + 1
+        current_question = self.get_current_question()
+        self.add_to_used_ids(current_question)
+        if current_question.id < 3:
+            new_question_id = self.get_current_question().id + 1
+        elif current_question.id == 3:
+            new_question_id = self.get_random_question_id()
+            return self.get_info_view(new_question_id, 0)
+        else:
+            new_question_id = self.get_random_question_id()
         try:
             Question.objects.get(pk=new_question_id)
         except (KeyError, Question.DoesNotExist):
-            # user_id = self.request.session['user_id']
             return HttpResponseRedirect(reverse("quiz:complete"))
-
-        if self.get_current_question().id % 10 == 0:
-            self.request.session['current_question'] = self.get_current_question().id
-            return HttpResponseRedirect(reverse("quiz:info_view"))
-
+        if self.is_questions_empty():
+            return HttpResponseRedirect(reverse("quiz:complete"))
+        is_section_end = (len(self.get_used_questions_ids()) - 3) % 10 == 0
+        if is_section_end:
+            current_section = (len(self.get_used_questions_ids()) - 3) // 10
+            return self.get_info_view(new_question_id, current_section)
         return HttpResponseRedirect(reverse("quiz:question_form", args=(new_question_id,)))
 
     def save_incorrect_choice(self, choice):
@@ -137,9 +177,8 @@ class InfoView(generic.TemplateView):
     template_name = 'quiz/info.html'
 
     def get_context_data(self, **kwargs):
-        current_question_id = self.request.session['current_question']
-        current_section = int(current_question_id / 10)
-        next_question_id = current_question_id + 1
+        current_section = self.request.session['current_section']
+        next_question_id = self.request.session['next_question_id']
         return {
             "current_section": current_section,
             "next_question_id": next_question_id,

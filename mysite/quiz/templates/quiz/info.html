@@ -1,7 +1,11 @@
 {% extends 'quiz/base.html' %}
 
 {% block content %}
-    <h1 class="text-center">Section {{ current_section }} Complete</h1>
+    {% if current_section == 0 %}
+        <h1 class="text-center">Practice section complete <i class="fa-solid fa-circle-check"></i></h1>
+    {% else %}
+        <h1 class="text-center">Section {{ current_section }} Complete</h1>
+    {% endif %}
     <div class="border border-dark p-4 mt-4">
         <p class="m-0">Please <b>continue</b> when you are ready to move on to the next section.</p>
     </div>
