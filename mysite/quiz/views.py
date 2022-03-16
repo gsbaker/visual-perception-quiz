@@ -20,12 +20,9 @@ class IndexView(generic.FormView):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
         user = form.create_user()
-
         if not user:  # check_user returned False
             return HttpResponseRedirect(reverse('quiz:index'))
-
         self.request.session['user_id'] = user.id
-
         return HttpResponseRedirect(reverse('quiz:question_form', args=(1,)))
 
 
@@ -53,14 +50,9 @@ class QuestionFormView(generic.CreateView):
         return User.objects.get(pk=self.request.session['user_id'])
 
     def get_image_path(self):
-        current_question_id = self.get_current_question().id
-        if current_question_id <= 20:
-            image_index = current_question_id
-        elif current_question_id <= 30:
-            image_index = current_question_id - 10
-        else:
-            image_index = current_question_id - 20
-        return "quiz/lines/lines-" + str(image_index) + ".jpg"
+        current_question = self.get_current_question()
+        image_number = current_question.image_number
+        return "quiz/lines/v3/lines-" + str(image_number) + ".jpg"
 
     def get_sorted_choices_set(self):
         choices_set = self.get_current_question().choice_set.all()
@@ -95,7 +87,7 @@ class QuestionFormView(generic.CreateView):
         except (KeyError, Choice.DoesNotExist):
             return False
 
-    def save_choice(self, choice):
+    def save_choice_in_session(self, choice):
         user_choice_key = str(self.get_current_user().id) + "-" + str(self.get_current_question().id)
         self.request.session[user_choice_key] = choice.id
         self.get_current_user().save()
@@ -115,7 +107,8 @@ class QuestionFormView(generic.CreateView):
                 return question.id
 
     def get_info_view(self, new_question_id, current_section):
-        self.request.session['current_question'] = self.get_current_question().id
+        current_question = self.get_current_question()
+        self.request.session['current_question'] = current_question.id
         self.request.session['current_section'] = current_section
         self.request.session['next_question_id'] = new_question_id
         return HttpResponseRedirect(reverse("quiz:info_view"))
@@ -151,6 +144,13 @@ class QuestionFormView(generic.CreateView):
             return self.get_info_view(new_question_id, current_section)
         return HttpResponseRedirect(reverse("quiz:question_form", args=(new_question_id,)))
 
+    def save_choice_to_db(self, choice):
+        user = self.get_current_user()
+        question = self.get_current_question()
+        answer = str(question.id) + ',' + choice.choice_text
+        user.answers.append(answer)
+        user.save()
+
     def save_incorrect_choice(self, choice):
         incorrect_choice = IncorrectChoice()
         incorrect_choice.question = self.get_current_question()
@@ -165,11 +165,9 @@ class QuestionFormView(generic.CreateView):
             self.get_new_question()
         # get selected choice
         selected_choice = self.get_selected_choice(form)
-        # check for an incorrect answer
-        if not selected_choice.correct:
-            self.save_incorrect_choice(selected_choice)
         # save the selected choice
-        self.save_choice(selected_choice)
+        self.save_choice_to_db(selected_choice)
+        self.save_choice_in_session(selected_choice)
         return self.get_new_question()
 
 

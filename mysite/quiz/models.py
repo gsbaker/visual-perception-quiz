@@ -7,8 +7,14 @@ from django.contrib.postgres.fields import ArrayField
 # Create your models here.
 
 
+class UserAnswer(models.Model):
+    question_id = models.IntegerField(default=0)
+    choice = models.CharField(max_length=10)
+
+
 class User(models.Model):
     used_question_ids = ArrayField(models.IntegerField(), default=list)
+    answers = ArrayField(models.CharField(max_length=200), default=list)
 
     def __str__(self):
         return "User #" + str(self.id)
@@ -25,6 +31,7 @@ class User(models.Model):
 
 class Question(models.Model):
     section_number = models.IntegerField(default=1)
+    image_number = models.IntegerField(default=0)
     question_text = models.CharField(max_length=200)
 
     def __str__(self):
