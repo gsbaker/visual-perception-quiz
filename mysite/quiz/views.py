@@ -115,6 +115,8 @@ class QuestionFormView(generic.CreateView):
 
     def add_to_used_ids(self, question):
         user = self.get_current_user()
+        if question.id in user.used_question_ids:  # avoid duplicates
+            return
         user.used_question_ids.append(question.id)
         user.save()
 
@@ -125,6 +127,8 @@ class QuestionFormView(generic.CreateView):
     def get_new_question(self):
         current_question = self.get_current_question()
         self.add_to_used_ids(current_question)
+        if self.is_questions_empty():
+            return HttpResponseRedirect(reverse("quiz:complete"))
         if current_question.id < 3:
             new_question_id = self.get_current_question().id + 1
         elif current_question.id == 3:
@@ -135,8 +139,6 @@ class QuestionFormView(generic.CreateView):
         try:
             Question.objects.get(pk=new_question_id)
         except (KeyError, Question.DoesNotExist):
-            return HttpResponseRedirect(reverse("quiz:complete"))
-        if self.is_questions_empty():
             return HttpResponseRedirect(reverse("quiz:complete"))
         is_section_end = (len(self.get_used_questions_ids()) - 3) % 10 == 0
         if is_section_end:
