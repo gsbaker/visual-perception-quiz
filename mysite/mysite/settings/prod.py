@@ -7,7 +7,7 @@ DEBUG = False
 
 SECRET_KEY = os.environ['SECRET_KEY'] 
 
-ALLOWED_HOSTS = ['40.71.223.198', 'www.visualperceptionquiz.com', 'https://www.visualperceptionquiz.com', 'visualperceptionquiz.com', 'localhost']
+ALLOWED_HOSTS = ['164.92.147.223', 'www.visualperceptionquiz.com', 'https://www.visualperceptionquiz.com', 'visualperceptionquiz.com', 'localhost']
 
 DATABASES = {
     'default': {
