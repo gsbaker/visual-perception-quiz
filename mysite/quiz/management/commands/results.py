@@ -66,8 +66,8 @@ class Command(BaseCommand, ABC):
         question = Question.objects.get(pk=question_id)
         choices = question.choice_set.all()
         for choice in choices:
-            if choice.correct:
-                if user_choice != choice.choice_text:
+            if not choice.correct:
+                if user_choice == choice.choice_text:
                     self.incorrect_responses_dict[set_number] += 1
 
     def collate_incorrect_responses(self):
