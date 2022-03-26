@@ -33,7 +33,7 @@ class Command(BaseCommand, ABC):
         self.agree_crowd_responses_dict = self.correct_responses_dict.copy()
 
     def handle(self, *args, **options):
-        # print("Full Data Sets:", self.count_full_data_sets())
+        print("Full Data Sets:", self.count_full_data_sets())
         # print("Q51 Results:", self.inspect_answers(51))
         # self.collate_correct_responses()
         # print("Correct responses:", self.correct_responses_dict)
