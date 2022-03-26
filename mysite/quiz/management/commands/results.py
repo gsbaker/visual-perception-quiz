@@ -103,15 +103,15 @@ class Command(BaseCommand, ABC):
     def collate_correct_responses(self):
         correct_answers = 0
         for user in self.users:
-            # if len(user.used_question_ids) == 83:
-            unordered_answers = []
-            for answer in user.answers:
-                question_choice_pair = answer.split(",")
-                answer_question_id = int(question_choice_pair[0])
-                answer_choice = question_choice_pair[1]
-                unordered_answers.append((answer_question_id, answer_choice))
-            ordered_answers = sorted(unordered_answers, key=lambda tup: tup[0])
-            correct_answers += count_correct_answers(ordered_answers, 1)
+            if len(user.used_question_ids) == 83:
+                unordered_answers = []
+                for answer in user.answers:
+                    question_choice_pair = answer.split(",")
+                    answer_question_id = int(question_choice_pair[0])
+                    answer_choice = question_choice_pair[1]
+                    unordered_answers.append((answer_question_id, answer_choice))
+                ordered_answers = sorted(unordered_answers, key=lambda tup: tup[0])
+                correct_answers += count_correct_answers(ordered_answers, 1)
         return correct_answers
 
     def collate_incorrect_responses_helper(self, question_id, user_choice, set_number):
