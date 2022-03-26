@@ -22,19 +22,6 @@ def test_crowd_correct(section):
         return True
 
 
-def count_correct_answers(answers, section):
-    count = 0
-    n = (10 * section) - 6
-    for i in range(n, n + 10):
-        question = Question.objects.get(pk=i)
-        choices = question.choice_set.all()
-        for choice in choices:
-            if choice.correct:
-                if choice.choice_text == answers[question.id][1]:
-                    count += 1
-    return count
-
-
 class Command(BaseCommand, ABC):
     help = "Counts the number of questions"
 
@@ -100,6 +87,19 @@ class Command(BaseCommand, ABC):
                     elif q_id in range(74, 84):
                         self.collate_agree_crowd_helper(choices, user_choice, 8)
 
+    @staticmethod
+    def count_correct_answers(answers, section):
+        count = 0
+        n = (10 * section) - 6
+        for i in range(n, n + 10):
+            question = Question.objects.get(pk=i)
+            choices = question.choice_set.all()
+            for choice in choices:
+                if choice.correct:
+                    if choice.choice_text == answers[i-1][1]:
+                        count += 1
+        return count
+
     def collate_correct_responses(self):
         correct_answers = 0
         for user in self.users:
@@ -111,7 +111,7 @@ class Command(BaseCommand, ABC):
                     answer_choice = question_choice_pair[1]
                     unordered_answers.append((answer_question_id, answer_choice))
                 ordered_answers = sorted(unordered_answers, key=lambda tup: tup[0])
-                correct_answers += count_correct_answers(ordered_answers, 1)
+                correct_answers += self.count_correct_answers(ordered_answers, 1)
         return correct_answers
 
     def collate_incorrect_responses_helper(self, question_id, user_choice, set_number):
