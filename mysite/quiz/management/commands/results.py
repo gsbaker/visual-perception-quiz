@@ -17,9 +17,10 @@ class Command(BaseCommand, ABC):
         print("Full Data Sets:", self.count_full_data_sets())
         print("Q51 Results:", self.inspect_answers(51))
         print("Crowd percentages (1) seem ok:", self.test_crowd_correct(1))
-        print("Correct answers:", self.analyse_answers()[0])
-        print("Incorrect answers", self.analyse_answers()[1])
-        print("Agree with crowd answers", self.analyse_answers()[2])
+        answers_dicts = self.analyse_answers()
+        print("Correct answers:", answers_dicts[0])
+        print("Incorrect answers", answers_dicts[1])
+        print("Agree with crowd answers", answers_dicts[2])
 
     def count_full_data_sets(self):
         count = 0
