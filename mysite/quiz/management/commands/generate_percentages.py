@@ -22,7 +22,7 @@ class Command(BaseCommand, ABC):
                 choices = question.choice_set.order_by('choice_text')
                 index = 0
                 for choice in choices:
-                    choice.percentage = int(percentages[index])
+                    choice.crowd_percentage = int(percentages[index])
                     choice.save()
                     index += 1
 

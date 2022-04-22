@@ -24,29 +24,29 @@ class Command(BaseCommand, ABC):
                 correct_answer = self.answer_dict[question.image_number]
                 for choice in choices:
                     if choice.choice_text == correct_answer:
-                        choice.correct = True
+                        choice.is_correct = True
                     else:
-                        choice.correct = False
+                        choice.is_correct = False
                     choice.save()
             else:
                 if question.image_number == 21:
                     choices = question.choice_set.all()
                     for choice in choices:
                         if choice.choice_text in ["B", "D"]:
-                            choice.correct = True
+                            choice.is_correct = True
                         else:
-                            choice.correct = False
+                            choice.is_correct = False
                         choice.save()
                 elif question.image_number == 22:
                     choices = question.choice_set.all()
                     for choice in choices:
                         if choice.choice_text in ["A", "B", "C"]:
-                            choice.correct = True
+                            choice.is_correct = True
                         else:
-                            choice.correct = False
+                            choice.is_correct = False
                         choice.save()
                 elif question.image_number == 23:
                     choices = question.choice_set.all()
                     for choice in choices:
-                        choice.correct = True
+                        choice.is_correct = True
                         choice.save()

@@ -8,16 +8,11 @@
             {% for choice in sorted_choices_set %}
                 <div class="d-flex justify-content-center align-items-center mt-3">
                     <p class="m-0 p-1">{{ choice.choice_text }}</p>
-                    {#                <div class="progress-bar-container">#}
-                    {#                    <div id="progress-bar-{{ forloop.counter }}" class="bg-primary progress-bar">&nbsp</div>#}
-                    {#                </div>#}
-                    {#                <div id="progress-bar-{{ forloop.counter }}-message">Waiting for answers...</div>#}
-                    {#            </div>#}
                     <div class="w-75 p-1">
                         <div class="progress">
-                            <div class="progress-bar" role="progressbar" style="width: {{ choice.percentage }}%;"
-                                 aria-valuenow="{{ choice.percentage }}" aria-valuemin="0" aria-valuemax="100">
-                                {{ choice.percentage }}%
+                            <div class="progress-bar" role="progressbar" style="width: {{ choice.crowd_percentage }}%;"
+                                 aria-valuenow="{{ choice.crowd_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                {{ choice.crowd_percentage }}%
                             </div>
                         </div>
                     </div>

@@ -7,7 +7,7 @@ from quiz.models import User, Question
 # tests on prod data
 
 class Command(BaseCommand, ABC):
-    help = "Counts the number of questions"
+    help = "Collates results"
 
     def __init__(self):
         super().__init__()
@@ -17,16 +17,45 @@ class Command(BaseCommand, ABC):
         print("Full Data Sets:", self.count_full_data_sets())
         print("Q51 Results:", self.inspect_answers(51))
         print("Crowd percentages (1) seem ok:", self.test_crowd_correct(1))
-        answers_dicts = self.analyse_answers()
-        print("Correct answers:", answers_dicts[0])
-        print("Incorrect answers", answers_dicts[1])
-        print("Agree with crowd answers", answers_dicts[2])
+        print(self.count_total_correct())
+        # answers_dicts = self.analyse_answers()
+        # print("Correct answers:", answers_dicts[0])
+        # print("Incorrect answers", answers_dicts[1])
+        # print("Agree with crowd answers", answers_dicts[2])
 
     def count_full_data_sets(self):
         count = 0
         for user in self.users:
             if len(user.used_question_ids) == 83:
                 count += 1
+        return count
+
+    def lookup_answer(self, question_id):
+        question = Question.objects.get(pk=question_id)
+        choices = question.choice_set.all()
+        for choice in choices:
+            if choice.is_correct:
+                return choice
+
+    def count_total_correct(self):
+        count = 0
+        for user in self.users:
+            if len(user.used_question_ids) == 83:
+                unordered_answers = []
+                for answer in user.answers:
+                    question_choice_pair = answer.split(",")
+                    answer_question_id = int(question_choice_pair[0])
+                    answer_choice = question_choice_pair[1]
+                    unordered_answers.append((answer_question_id, answer_choice))
+                ordered_answers = sorted(unordered_answers, key=lambda tup: tup[0])
+                ordered_answers = ordered_answers[3:]
+                # print(ordered_answers)
+                for pair in ordered_answers:
+                    question_id = pair[0]
+                    choice = pair[1]
+                    correct_choice = self.lookup_answer(question_id)
+                    if correct_choice.choice_text == choice:
+                        count += 1
         return count
 
     @staticmethod
@@ -37,7 +66,7 @@ class Command(BaseCommand, ABC):
             question = Question.objects.get(pk=i)
             choices = question.choice_set.all()
             for choice in choices:
-                if choice.correct:
+                if choice.is_correct:
                     if choice.choice_text == answers[i-1][1]:
                         count += 1
         return count
@@ -50,7 +79,7 @@ class Command(BaseCommand, ABC):
             question = Question.objects.get(pk=i)
             choices = question.choice_set.all()
             for choice in choices:
-                if choice.correct:
+                if choice.is_correct:
                     if choice.choice_text != answers[i - 1][1]:
                         count += 1
         return count
@@ -64,7 +93,7 @@ class Command(BaseCommand, ABC):
             choices = question.choice_set.all()
             crowd_choice = choices[0]
             for choice in choices:
-                if choice.percentage > crowd_choice.percentage:
+                if choice.crowd_percentage > crowd_choice.crowd_percentage:
                     crowd_choice = choice
             if crowd_choice.choice_text == answers[i - 1][1]:
                 count += 1
@@ -110,10 +139,10 @@ class Command(BaseCommand, ABC):
             choices = question.choice_set.all()
             crowd_choice = choices[0]
             for choice in choices:
-                if choice.percentage > crowd_choice.percentage:
+                if choice.crowd_percentage > crowd_choice.crowd_percentage:
                     crowd_choice = choice
             for choice in choices:
-                if choice.correct:
+                if choice.is_correct:
                     if crowd_choice.choice_text != choice.choice_text:
                         return False, str(choice)
             return True

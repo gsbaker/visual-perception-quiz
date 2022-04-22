@@ -4,8 +4,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
 
-from .forms import QuestionAnswerForm, UserForm
-from .models import User, Question, Choice, Answer, IncorrectChoice
+from .forms import QuestionChoiceForm, UserForm
+from .models import User, Question, Choice, QuestionChoices
 
 
 # Create your views here.
@@ -27,8 +27,8 @@ class IndexView(generic.FormView):
 
 
 class QuestionFormView(generic.CreateView):
-    form_class = QuestionAnswerForm
-    model = Answer
+    form_class = QuestionChoiceForm
+    model = QuestionChoices
     template_name = 'quiz/detail.html'
     questions_count = 83
 
@@ -152,13 +152,6 @@ class QuestionFormView(generic.CreateView):
         answer = str(question.id) + ',' + choice.choice_text
         user.answers.append(answer)
         user.save()
-
-    def save_incorrect_choice(self, choice):
-        incorrect_choice = IncorrectChoice()
-        incorrect_choice.question = self.get_current_question()
-        incorrect_choice.choice = choice
-        incorrect_choice.user = self.get_current_user()
-        incorrect_choice.save()
 
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
