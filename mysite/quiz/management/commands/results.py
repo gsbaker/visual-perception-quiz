@@ -14,14 +14,9 @@ class Command(BaseCommand, ABC):
         self.users = User.objects.all()
 
     def handle(self, *args, **options):
-        print("Full Data Sets:", self.count_full_data_sets())
-        print("Q51 Results:", self.inspect_answers(51))
-        print("Crowd percentages (1) seem ok:", self.test_crowd_correct(1))
-        print(self.count_total_correct())
-        # answers_dicts = self.analyse_answers()
-        # print("Correct answers:", answers_dicts[0])
-        # print("Incorrect answers", answers_dicts[1])
-        # print("Agree with crowd answers", answers_dicts[2])
+        for user in self.users:
+            if len(user.used_question_ids) == 83:
+                print(user.answers)
 
     def count_full_data_sets(self):
         count = 0
@@ -54,6 +49,8 @@ class Command(BaseCommand, ABC):
                     question_id = pair[0]
                     choice = pair[1]
                     correct_choice = self.lookup_answer(question_id)
+                    if correct_choice is None:
+                        return question_id, user.id
                     if correct_choice.choice_text == choice:
                         count += 1
         return count
@@ -126,6 +123,10 @@ class Command(BaseCommand, ABC):
             if len(answers) > 0:
                 for answer in answers:
                     pair = answer.split(",")
+                    try:
+                        int(pair[0])
+                    except ValueError:
+                        return user.id, answer
                     current_question_id = int(pair[0])
                     if current_question_id == question_id:
                         answers_dict[pair[1]] += 1
